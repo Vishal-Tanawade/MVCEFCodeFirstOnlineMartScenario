@@ -26,23 +26,49 @@ namespace MVCEFCodeFirstOnlineMartScenario.Controllers
         // GET: Login/Create
         public ActionResult Create()
         {
+
+            ViewBag.QuId = new SelectList(db.SecurityQuestions, "QuId", "Question");
+            ViewBag.UserTypeID = new SelectList(db.UserTypes.Where(u=>u.UserTypeID==2), "UserTypeID", "UserTypeName"); // where clause is used to restrict only user type create
             return View();
         }
 
         // POST: Login/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Login(User user)
         {
-            try
-            {
-                // TODO: Add insert logic here
+            User usr = db.Users.FirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
 
-                return RedirectToAction("Index");
-            }
-            catch
+            if (user.Email == "admin@onlinemart.com" && user.Password == "admin@123")
             {
-                return View();
+                return RedirectToAction("Index", "Users");
             }
+
+            //User usr = db.Users.FirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
+            if (usr != null)
+            {
+                Session["UserId"] = usr.UserId;
+                if (user.UserTypeID == 1)
+                {
+                    return RedirectToAction("Index", "Users");
+                }
+                else if (user.UserTypeID == 2)
+                {
+                    return RedirectToAction("Details", "Customer");
+
+                }
+                else if (user.UserTypeID == 4)
+                {
+                    return RedirectToAction("Index", "User");
+                }
+
+
+
+            }
+            ViewData["Status"] = "Invalid user name or password!!";
+
+            ViewBag.UserTypeID = new SelectList(db.UserTypes, "UserTypeID", "UserTypeName");
+            return View("Index");
+
         }
 
         // GET: Login/Edit/5
