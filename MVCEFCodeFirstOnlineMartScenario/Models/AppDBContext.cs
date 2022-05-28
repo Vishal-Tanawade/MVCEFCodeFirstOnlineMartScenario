@@ -1,13 +1,12 @@
-﻿using MVCEFCodeFirstOnlineMartScenario.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace MVCEFCodeFirstOnlineMartScenario
+namespace MVCEFCodeFirstOnlineMartScenario.Models
 {
-    public class AppDBContext: DbContext
+    public class AppDBContext : DbContext
     {
         public AppDBContext() : base("name=OnlineMartConnnectionString")
         {

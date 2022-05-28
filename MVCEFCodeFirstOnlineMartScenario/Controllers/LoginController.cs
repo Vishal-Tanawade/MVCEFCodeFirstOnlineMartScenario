@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVCEFCodeFirstOnlineMartScenario.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,9 +9,11 @@ namespace MVCEFCodeFirstOnlineMartScenario.Controllers
 {
     public class LoginController : Controller
     {
+        private AppDBContext db = new AppDBContext();
         // GET: Login
         public ActionResult Index()
         {
+            ViewBag.UserTypeID = new SelectList(db.UserTypes, "UserTypeID", "UserTypeName");
             return View();
         }
 
