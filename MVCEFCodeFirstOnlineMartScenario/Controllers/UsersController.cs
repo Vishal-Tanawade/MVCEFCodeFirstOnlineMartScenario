@@ -18,6 +18,12 @@ namespace MVCEFCodeFirstOnlineMartScenario.Controllers
         // GET: Users
         public ActionResult Index()
         {
+
+            int? id = Convert.ToInt32(Session["UserId"]);
+            if (id == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var users = db.Users.Include(u => u.SecurityQuestion).Include(u => u.UserType);
             return View(users.ToList());
         }
@@ -123,6 +129,12 @@ namespace MVCEFCodeFirstOnlineMartScenario.Controllers
             db.Users.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult SignOut()
+        {
+            Session.Abandon();
+            return RedirectToAction("Index", "Login");
         }
 
         protected override void Dispose(bool disposing)

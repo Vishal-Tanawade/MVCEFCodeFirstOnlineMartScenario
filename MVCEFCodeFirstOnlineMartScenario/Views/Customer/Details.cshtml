@@ -5,6 +5,11 @@
     Layout = "~/Views/Shared/_AfterLoginLayout.cshtml";
 }
 
+<h3>Session Id= @Session.SessionID </h3>
+<h3>Session time out= @Session.Timeout </h3>
+<h3>session mode= @Session.Mode    </h3>
+<h3>session cokies=  @Session.CookieMode   </h3>
+
 <h2>Details</h2>
 
 <div>
@@ -94,6 +99,7 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.UserId })*@
+    @Html.ActionLink("Edit", "Edit") |
+    @Html.ActionLink("Back to Dashboard", "Details")
 </p>

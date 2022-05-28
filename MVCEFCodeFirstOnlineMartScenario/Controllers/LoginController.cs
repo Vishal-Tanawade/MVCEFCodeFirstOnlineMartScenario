@@ -9,7 +9,9 @@ namespace MVCEFCodeFirstOnlineMartScenario.Controllers
 {
     public class LoginController : Controller
     {
+
         private AppDBContext db = new AppDBContext();
+
         // GET: Login
         public ActionResult Index()
         {
@@ -26,11 +28,27 @@ namespace MVCEFCodeFirstOnlineMartScenario.Controllers
         // GET: Login/Create
         public ActionResult Create()
         {
-
             ViewBag.QuId = new SelectList(db.SecurityQuestions, "QuId", "Question");
-            ViewBag.UserTypeID = new SelectList(db.UserTypes.Where(u=>u.UserTypeID==2), "UserTypeID", "UserTypeName"); // where clause is used to restrict only user type create
+            ViewBag.UserTypeID = new SelectList(db.UserTypes.Where(u => u.UserTypeID != 1), "UserTypeID", "UserTypeName");
             return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "UserId,UserTypeID,FirstName,LastName,UserName,Dob,PhoneNo,Email,Password,QuId,Answer")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Users.Add(user);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.QuId = new SelectList(db.SecurityQuestions, "QuId", "Question", user.QuId);
+            ViewBag.UserTypeID = new SelectList(db.UserTypes, "UserTypeID", "UserTypeName", user.UserTypeID);
+            return View(user);
+        }
+
 
         // POST: Login/Create
         [HttpPost]

@@ -24,8 +24,8 @@ namespace MVCEFCodeFirstOnlineMartScenario.Controllers
         // GET: Customer/Details/5
         public ActionResult Details()
         {
-            int ?id = Convert.ToInt32(Session["UserId"]);
-            if (id == null)
+            int? id = Convert.ToInt32(Session["UserId"]);
+            if (Session["UserId"] == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -65,19 +65,21 @@ namespace MVCEFCodeFirstOnlineMartScenario.Controllers
         }
 
         // GET: Customer/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit()
         {
+            int? id = Convert.ToInt32(Session["UserId"]);
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index", "Login");
             }
+
             User user = db.Users.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
             }
             ViewBag.QuId = new SelectList(db.SecurityQuestions, "QuId", "Question", user.QuId);
-            ViewBag.UserTypeID = new SelectList(db.UserTypes.Where(u=>u.UserTypeID==2), "UserTypeID", "UserTypeName", user.UserTypeID);
+            ViewBag.UserTypeID = new SelectList(db.UserTypes.Where(u => u.UserTypeID == 2), "UserTypeID", "UserTypeName", user.UserTypeID);  //edited
             return View(user);
         }
 
@@ -125,6 +127,11 @@ namespace MVCEFCodeFirstOnlineMartScenario.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult SignOut()
+        {
+            Session.Abandon();
+            return RedirectToAction("Index", "Login");
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
